@@ -2,6 +2,7 @@ from typing import Dict
 
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
+from src.errors.error_types.http_conflict import HttpConflictError
 from src.models.entities.attendees import Attendees
 from src.models.entities.events import Events
 from src.models.settings.connection import db_connection_handler
@@ -23,7 +24,7 @@ class EventsRepository:
 
                 return events_info
             except IntegrityError:
-                raise Exception("Evento já cadastrado!")
+                raise HttpConflictError("Evento já cadastrado!")
             except Exception as exception:
                 database.session.rollback()
                 raise exception
